@@ -17,11 +17,11 @@ use sui_types::{
     messages::TransactionData,
 };
 
-use crate::rpc_types::SuiTypeTag;
 use crate::rpc_types::{
     GetObjectDataResponse, GetRawObjectDataResponse, SuiInputObjectKind, SuiObjectInfo,
     SuiObjectRef, TransactionEffectsResponse, TransactionResponse,
 };
+use crate::rpc_types::{RPCTransactionRequestParams, SuiTypeTag};
 
 pub mod client;
 pub mod rpc_types;
@@ -181,6 +181,15 @@ pub trait RpcTransactionBuilder {
         signer: SuiAddress,
         primary_coin: ObjectID,
         coin_to_merge: ObjectID,
+        gas: Option<ObjectID>,
+        gas_budget: u64,
+    ) -> RpcResult<TransactionBytes>;
+
+    #[method(name = "batchTransaction")]
+    async fn batch_transaction(
+        &self,
+        signer: SuiAddress,
+        single_transaction_params: Vec<RPCTransactionRequestParams>,
         gas: Option<ObjectID>,
         gas_budget: u64,
     ) -> RpcResult<TransactionBytes>;
